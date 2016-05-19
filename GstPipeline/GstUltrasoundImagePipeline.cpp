@@ -24,7 +24,7 @@ GstUltrasoundImagePipeline::GstUltrasoundImagePipeline(UltrasoundController* con
         std::bind(&GstUltrasoundImagePipeline::onSetSlice, this, std::placeholders::_1)
     );
 
-    fps = 40;
+    fps = 16;
 
     port = getFreePort();
     createGstPipeline();
@@ -72,6 +72,11 @@ void GstUltrasoundImagePipeline::createGstPipeline() {
     videoenc->property("deadline", 1);
     videoenc->property("cpu-used", 4);
     videoenc->property("lag-in-frames", 0);
+    videoenc->property("error-resilient", 1);
+
+    //videoenc->property("target-bitrate", 1000);
+
+
     //videoenc->property("keyframe-max-dist", 128);
 
     //gst_preset_load_preset(GST_PRESET(videoenc), "Profile Realtime");
@@ -176,8 +181,12 @@ void GstUltrasoundImagePipeline::onSetSlice(int slice) {
     frame_source->setSlice(slice);
 }
 
-int GstUltrasoundImagePipeline::getFPS() {
+double GstUltrasoundImagePipeline::getFPS() {
     return fps;
+}
+
+void GstUltrasoundImagePipeline::setFPS(double fps) {
+    this->fps = fps;
 }
 
 void GstUltrasoundImagePipeline::setOnNewPatientMetadataCallback(std::function<void(PatientMetadata)> cb) {
@@ -186,5 +195,13 @@ void GstUltrasoundImagePipeline::setOnNewPatientMetadataCallback(std::function<v
 
 void GstUltrasoundImagePipeline::onNewPatientMetadata(PatientMetadata patient) {
     this->onNewPatientMetadataCallback(patient);
+}
+
+
+void GstUltrasoundImagePipeline::setQuantizer(int quantizer) {
+    int quant = 63 * quantizer / 100.;
+
+    videoenc->property("min-quantizer", quant);
+    videoenc->property("max-quantizer", quant);
 }
 

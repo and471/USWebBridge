@@ -47,12 +47,14 @@ void DNLFileFrameSource::GenerateImagesThread() {
             this->onImage(image);
 
             double framerate = image->acquisitionFrameRate()[0];
-            double At = 50; // default value, ms
-            if (framerate>0){
-                At= 1.0/framerate*1000.0;
+
+            if (filename.string().find("2D") != std::string::npos) {
+                framerate = 16;
+            } else if (filename.string().find("3D") != std::string::npos) {
+                framerate = 3;
             }
 
-            std::this_thread::sleep_for(std::chrono::milliseconds((int) At));
+            std::this_thread::sleep_for(std::chrono::milliseconds((int) ((1./framerate)*1000)));
         }
     }
 }

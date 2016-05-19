@@ -67,6 +67,16 @@ void JanusUltrasoundSession::onDataReceived(char* msg) {
         int slice = obj["data"]["slice"];
         onSetSlice(slice);
     }
+
+    if (obj["method"] == "QUANTIZER") {
+        int quantizer = obj["data"]["quantizer"];
+        pipeline->setQuantizer(quantizer);
+    }
+
+    if (obj["method"] == "FRAMERATE") {
+        double fps = obj["data"]["fps"];
+        pipeline->setFPS(fps);
+    }
 }
 
 int JanusUltrasoundSession::getPort() {

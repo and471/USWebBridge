@@ -20,6 +20,9 @@ public:
     virtual void setOnNewPatientMetadataCallback(std::function<void(PatientMetadata)> cb) =0;
     virtual void onNewPatientMetadata(PatientMetadata patient) =0;
 
+    virtual void setQuantizer(int quantizer) =0;
+    virtual void setFPS(double fps) =0;
+    virtual double getFPS() =0;
     virtual void setFrameSource(FrameSource* frame_source) =0;
 
     virtual int getPort() =0;
@@ -27,7 +30,6 @@ public:
 protected:
     UltrasoundController* controller;
     FrameSource* frame_source;
-    int fps = 20;
 
     std::function<void(PatientMetadata)> onNewPatientMetadataCallback;
 

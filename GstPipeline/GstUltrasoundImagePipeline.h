@@ -32,10 +32,13 @@ public:
     void onSetSlice(int slice);
     void setFrameSource(FrameSource* frame_source);
     void onFrame(Frame* frame);
+    void setFPS(double fps);
+    double getFPS();
     int getPort();
 
     void setOnNewPatientMetadataCallback(std::function<void(PatientMetadata)> cb);
     void onNewPatientMetadata(PatientMetadata patient);
+    void setQuantizer(int quantizer);
 
 private:
     FrameSource* frame_source;
@@ -44,6 +47,7 @@ private:
     bool running = false;
     PatientMetadata patient;
     int port;
+    double fps;
 
     std::thread* thread;
     Gst::ClockTime timestamp = 0;
@@ -55,7 +59,6 @@ private:
     int onNSlicesChangedCallbackID;
 
     void startThread();
-    int getFPS();
     void createGstPipeline();
 };
 
