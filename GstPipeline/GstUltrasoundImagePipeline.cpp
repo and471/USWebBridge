@@ -126,8 +126,6 @@ void GstUltrasoundImagePipeline::setFrameSource(FrameSource* frame_source) {
 }
 
 void GstUltrasoundImagePipeline::start() {
-    startTime = getMilliseconds();
-
     if (thread != nullptr) {
         fprintf(stderr, "Cannot start new thread: thread is already running\n");
     }
